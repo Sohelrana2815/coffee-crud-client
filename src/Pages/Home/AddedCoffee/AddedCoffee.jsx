@@ -8,7 +8,6 @@ const AddedCoffee = () => {
       .then((res) => res.json())
       .then((data) => setCoffees(data));
   }, []);
-  console.log(coffees);
 
   return (
     <>
