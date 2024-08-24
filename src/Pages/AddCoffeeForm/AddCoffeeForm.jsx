@@ -1,13 +1,14 @@
+import axios from "axios";
 import React from "react";
-import Swal from "sweetalert2";
 const AddCoffeeForm = () => {
   const handleAddCoffee = (e) => {
     e.preventDefault();
+
     const form = e.target;
     const name = form.name.value;
     const price = form.price.value;
     const supplier = form.supplier.value;
-    const test = form.test.value;
+    const taste = form.taste.value;
     const category = form.category.value;
     const details = form.details.value;
     const photoURL = form.photoURL.value;
@@ -15,42 +16,31 @@ const AddCoffeeForm = () => {
       name,
       price,
       supplier,
-      test,
+      taste,
       category,
       details,
       photoURL,
     };
     console.log(newCoffee);
-
-    // send data to the server
-
-    fetch("http://localhost:5000/coffees", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(newCoffee),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.insertedId) {
-          Swal.fire({
-            title: "Success!",
-            text: "New coffee added",
-            icon: "success",
-          });
+    
+    axios
+      .post("http://localhost:5000/coffees", newCoffee)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.insertedId) {
+          alert("New Coffee Added!!!!");
         }
+      })
+      .catch((error) => {
+        console.log(error.message);
       });
   };
+
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center">
-      <div className="w-full max-w-lg p-6 bg-white shadow-lg rounded-lg">
+      <div className="w-full max-w-lg p-6  bg-base-300  shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center mb-4">Add New Coffee</h2>
-        <p className="text-center mb-8 text-gray-600">
-          It is a long established fact that a reader will be distracted by the
-          readable content of a page when looking at its layout.
-        </p>
+
         <form onSubmit={handleAddCoffee}>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
@@ -65,7 +55,7 @@ const AddCoffeeForm = () => {
             <div>
               <label className="block text-sm font-medium mb-1">Price</label>
               <input
-                type="text"
+                type="number"
                 name="price"
                 placeholder="Enter coffee chef"
                 className="input input-bordered w-full"
@@ -84,7 +74,7 @@ const AddCoffeeForm = () => {
               <label className="block text-sm font-medium mb-1">Taste</label>
               <input
                 type="text"
-                name="test"
+                name="taste"
                 placeholder="Enter coffee taste"
                 className="input input-bordered w-full"
               />
